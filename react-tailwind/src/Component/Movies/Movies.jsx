@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { debounce } from "lodash";
 import MovieDetails from "./MovieDetails";
 import { motion } from "framer-motion";
+import { Pagination } from "./Pagination";
 
 const categories = ["All", "Action", "Comedy", "Drama", "Horror", "Romance"];
 
@@ -341,50 +342,14 @@ function Movies() {
           >
             Search
           </button>
-          <div className="flex items-center gap-1 text-sm p-4 ml-100">
-            <button
-              onClick={firstPage}
-              disabled={currentPage === 1}
-              className="px-3 py-1 rounded-full bg-rose-300 hover:bg-slate-500 dark:hover:bg-slate-600 disabled:opacity-50 disabled:hover:bg-transparent transition-colors cursor-pointer"
-            >
-              &lt;&lt;
-            </button>
-            <button
-              onClick={previousPage}
-              disabled={currentPage === 1}
-              className="px-3 py-1 rounded-full bg-rose-300 hover:bg-slate-500 dark:hover:bg-slate-600 disabled:opacity-50 disabled:hover:bg-transparent transition-colors cursor-pointer"
-            >
-              Previous
-            </button>
-            <span>Page</span>
-            <input
-              type="text"
-              placeholder={`1-500`}
-              title="Enter page number (1-500)"
-              value={currentPage}
-              onChange={hanlePageChange}
-              onBlur={(e) => {
-                const num = parseInt(e.target.value) || 1;
-                setCurrentPage(Math.min(Math.max(num, 1), 500));
-              }}
-              className="w-12 px-2 py-1 border rounded text-center bg-white dark:bg-slate-700"
-            />
-            <span>of 500</span>
-            <button
-              onClick={nextPage}
-              disabled={currentPage === 500}
-              className="px-3 py-1 rounded-full bg-rose-300 hover:bg-slate-500 dark:hover:bg-slate-600 disabled:opacity-50 disabled:hover:bg-transparent transition-colors cursor-pointer relative"
-            >
-              Next
-            </button>
-            <button
-              onClick={lastPage}
-              disabled={currentPage === 500}
-              className="px-3 py-1 rounded-full bg-rose-300 hover:bg-slate-500 dark:hover:bg-slate-600 disabled:opacity-50 disabled:hover:bg-transparent transition-colors cursor-pointer"
-            >
-              &gt;&gt;
-            </button>
-          </div>
+          <Pagination
+            currentPage={currentPage}
+            onPageChange={(e) => hanlePageChange(e)}
+            onFirstPage={firstPage}
+            onLastPage={lastPage}
+            onPreviousPage={previousPage}
+            onNextPage={nextPage}
+          />
 
           <div className="space-y-4">
             <button
