@@ -6,7 +6,7 @@ import MovieDetails from "./MovieDetails";
 import { Pagination } from "./Pagination";
 import { MoviesList } from "./MoviesList";
 import TopRatedSection from "./TopRatedSection";
-// import { Login } from "./Login";
+import Login from "./Login";
 import { Link } from "react-router-dom";
 
 const categories = ["All", "Action", "Comedy", "Drama", "Horror", "Romance"];
@@ -31,6 +31,7 @@ function Movies() {
     popularity: 0.7,
     rating: 0.3,
   });
+  const [showLogin, setShowLogin] = useState(false);
 
   // 主题切换
   const toggleTheme = () => {
@@ -174,63 +175,68 @@ function Movies() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-500">
       <header className="sticky top-0 bg-white dark:bg-gray-800 shadow-md z-50 p-4">
-        {/* <div className="max-w-7xl mx-auto flex justify-end">
-          <Link
-            to="/login"
+        <div className="max-w-7xl mx-auto flex justify-end gap-4">
+          <button
+            onClick={() => setShowLogin(!showLogin)}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
           >
-            登录/注册
-          </Link>
-        </div> */}
-        <div className="max-w-7xl mx-auto flex flex-wrap gap-4 items-center justify-between">
-          {/* 主题切换 */}
-          <div className="flex items-center gap-2">
-            <span className="text-sm">{theme === "Light" ? "☀️" : "🌙"}</span>
-            <label className="theme-switch">
-              <input
-                type="checkbox"
-                checked={theme === "Dark"}
-                onChange={toggleTheme}
-                className="opacity-0 w-0 h-0"
-              />
-              <span className="slider"></span>
-            </label>
-          </div>
-          {/* {Login seaction} */}
-
-          {/* 搜索框 */}
-          <form onSubmit={handleSearch} className="flex gap-2 flex-1 max-w-xl">
-            <input
-              type="text"
-              placeholder="Search movies..."
-              value={searchMovies}
-              onChange={(e) => setSearchMovies(e.target.value)}
-              className="flex-1 px-4 py-2 bg-white dark:bg-slate-700 rounded-full border border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <button
-              type="submit"
-              className="px-4 py-2 rounded-full bg-rose-300 hover:bg-rose-400 transition-colors"
-            >
-              Search
-            </button>
-          </form>
-
-          {/* 分页控制 */}
-          <Pagination
-            currentPage={currentPage}
-            onPageChange={(e) => {
-              const input = e.target.value;
-              if (!/^\d*$/.test(input)) return;
-              const num = Math.min(Math.max(parseInt(input) || 1, 1), 500);
-              setCurrentPage(num);
-            }}
-            onFirstPage={firstPage}
-            onLastPage={lastPage}
-            onPreviousPage={previousPage}
-            onNextPage={nextPage}
-          />
+            {showLogin ? "关闭登录" : "登录/注册"}
+          </button>
         </div>
       </header>
+      {showLogin && (
+        <div className="max-w-md mx-auto mt-8 p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
+          <Login />
+        </div>
+      )}
+      <div className="max-w-7xl mx-auto flex flex-wrap gap-4 items-center justify-between">
+        {/* 主题切换 */}
+        <div className="flex items-center gap-2">
+          <span className="text-sm">{theme === "Light" ? "☀️" : "🌙"}</span>
+          <label className="theme-switch">
+            <input
+              type="checkbox"
+              checked={theme === "Dark"}
+              onChange={toggleTheme}
+              className="opacity-0 w-0 h-0"
+            />
+            <span className="slider"></span>
+          </label>
+        </div>
+        {/* {Login seaction} */}
+
+        {/* 搜索框 */}
+        <form onSubmit={handleSearch} className="flex gap-2 flex-1 max-w-xl">
+          <input
+            type="text"
+            placeholder="Search movies..."
+            value={searchMovies}
+            onChange={(e) => setSearchMovies(e.target.value)}
+            className="flex-1 px-4 py-2 bg-white dark:bg-slate-700 rounded-full border border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            type="submit"
+            className="px-4 py-2 rounded-full bg-rose-300 hover:bg-rose-400 transition-colors"
+          >
+            Search
+          </button>
+        </form>
+
+        {/* 分页控制 */}
+        <Pagination
+          currentPage={currentPage}
+          onPageChange={(e) => {
+            const input = e.target.value;
+            if (!/^\d*$/.test(input)) return;
+            const num = Math.min(Math.max(parseInt(input) || 1, 1), 500);
+            setCurrentPage(num);
+          }}
+          onFirstPage={firstPage}
+          onLastPage={lastPage}
+          onPreviousPage={previousPage}
+          onNextPage={nextPage}
+        />
+      </div>
 
       <main className="container mx-auto p-4">
         {/* 排序控制 */}

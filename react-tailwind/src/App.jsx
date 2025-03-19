@@ -1,25 +1,15 @@
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import "./App.css";
 import Movies from "./Component/Movies/Movies";
+import Login from "./Component/Movies/Login";
 
 function App() {
   return (
     <>
       <BrowserRouter>
-        <nav className="App">
-          <ul>
-            <li className="nav">
-              <Link to="/movies">Movies</Link>
-              {/* <Link to="/counter">Counter</Link>
-              <Link to="/todo">Todo</Link> */}
-            </li>
-          </ul>
-        </nav>
         <Routes>
-          {/* <Route path="/homepage" element={<HomePage />} /> */}
+          <Route path="/login" element={<Login />}></Route>
           <Route path="/movies" element={<Movies />} />
-          {/* <Route path="/counter" element={<Counter />} />
-          <Route path="/todo" element={<Todo />} /> */}
         </Routes>
       </BrowserRouter>
     </>
