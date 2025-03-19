@@ -1,9 +1,13 @@
+// Movies.jsx
 import React, { useCallback, useEffect, useState } from "react";
 import { debounce } from "lodash";
 import { motion } from "framer-motion";
 import MovieDetails from "./MovieDetails";
 import { Pagination } from "./Pagination";
 import { MoviesList } from "./MoviesList";
+import TopRatedSection from "./TopRatedSection";
+// import { Login } from "./Login";
+import { Link } from "react-router-dom";
 
 const categories = ["All", "Action", "Comedy", "Drama", "Horror", "Romance"];
 
@@ -170,6 +174,14 @@ function Movies() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-500">
       <header className="sticky top-0 bg-white dark:bg-gray-800 shadow-md z-50 p-4">
+        {/* <div className="max-w-7xl mx-auto flex justify-end">
+          <Link
+            to="/login"
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          >
+            登录/注册
+          </Link>
+        </div> */}
         <div className="max-w-7xl mx-auto flex flex-wrap gap-4 items-center justify-between">
           {/* 主题切换 */}
           <div className="flex items-center gap-2">
@@ -184,6 +196,7 @@ function Movies() {
               <span className="slider"></span>
             </label>
           </div>
+          {/* {Login seaction} */}
 
           {/* 搜索框 */}
           <form onSubmit={handleSearch} className="flex gap-2 flex-1 max-w-xl">
@@ -254,7 +267,28 @@ function Movies() {
 
           {sortOption === "popularity_and_rating" && (
             <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-              {/* 权重滑动条 */}
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">
+                    Popularity Weight:{" "}
+                    {Math.round(sortWeights.popularity * 100)}%
+                  </label>
+                  <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.1"
+                    value={sortWeights.popularity}
+                    onChange={(e) =>
+                      setSortWeights({
+                        popularity: parseFloat(e.target.value),
+                        rating: 1 - parseFloat(e.target.value),
+                      })
+                    }
+                    className="w-full"
+                  />
+                </div>
+              </div>
             </div>
           )}
         </div>
@@ -274,28 +308,15 @@ function Movies() {
         />
 
         {/* 顶部评分电影 */}
-        <div className="mt-12">
-          <h2 className="text-2xl font-bold mb-4">Top Rated Movies</h2>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            {movies
-              .sort((a, b) => b.vote_average - a.vote_average)
-              .slice(0, 5)
-              .map((movie, index) => (
-                <div key={movie.id} className="relative group">
-                  <img
-                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                    alt={movie.title}
-                    className="w-full h-64 object-cover rounded-lg"
-                  />
-                  <div className="absolute bottom-0 bg-gradient-to-t from-black to-transparent w-full p-4 rounded-b-lg">
-                    <span className="text-white font-bold">
-                      #{index + 1} {movie.title}
-                    </span>
-                  </div>
-                </div>
-              ))}
-          </div>
-        </div>
+        <TopRatedSection
+          movies={filteredMovies}
+          isLoading={isLoading}
+          isClicked={isClicked}
+          isLiked={isLiked}
+          onLike={handleInteraction(setIsLiked)}
+          onSave={handleInteraction(setIsClicked)}
+          onMovieClick={handleMovieClick}
+        />
 
         {/* 随机电影 */}
         <div className="mt-12">
@@ -314,8 +335,10 @@ function Movies() {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             {random.map((movie) => (
-              <div
+              <motion.div
                 key={movie.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
                 className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow"
               >
                 <img
@@ -325,9 +348,14 @@ function Movies() {
                 />
                 <div className="p-3">
                   <h3 className="font-bold truncate">{movie.title}</h3>
-                  <p className="text-sm text-gray-500">{movie.release_date}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    {movie.release_date}
+                  </p>
+                  <p className="text-yellow-500 text-sm">
+                    ★ {movie.vote_average.toFixed(1)}
+                  </p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
