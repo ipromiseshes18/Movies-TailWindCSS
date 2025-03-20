@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 
 export const MovieCard = ({
   movie,
+  isInSaveList,
   isClicked,
   isLiked,
   onDelete,
@@ -15,8 +16,22 @@ export const MovieCard = ({
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.3 }}
-    className="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow flex flex-col h-full"
+    className="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow flex flex-col h-full relative"
   >
+    <button
+      onClick={(e) => {
+        e.stopPropagation();
+        onSave(movie);
+      }}
+      className={`absolute top-2 right-2 z-10 p-2 rounded-full bg-black/50 hover:bg-black/75 transition-all duration-500 ${
+        isInSaveList
+          ? "text-red-500 animate-pulse"
+          : "text-white hover:text-red-300"
+      }`}
+      title={isInSaveList ? "从收藏夹移除" : "加入收藏夹"}
+    >
+      {isInSaveList ? "❤️" : "🤍"}
+    </button>
     <div
       onClick={() => onMovieClick(movie)}
       className="flex flex-col items-center space-y-2 flex-grow p-3 cursor-pointer"

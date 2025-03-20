@@ -32,6 +32,10 @@ function Movies() {
     rating: 0.3,
   });
   const [showLogin, setShowLogin] = useState(false);
+  const [saveList, setSaveList] = useState(() => {
+    const saved = localStorage.getItem("saveList");
+    return saved ? JSON.parse(saved) : [];
+  });
 
   // 主题切换
   const toggleTheme = () => {
@@ -172,6 +176,22 @@ function Movies() {
     setIsModalOpen(true);
   };
 
+  const handleSaveList = (movie) => {
+    setSaveList((prev) => {
+      const exists = prev.some((m) => m.id === movie.id);
+      const newList = exists ? prev : [...prev, movie];
+      localStorage.setItem("saveList", JSON.stringify(newList));
+      return newList;
+    });
+  };
+
+  const handleRemoveSaveList = (movieId) => {
+    setSaveList((prev) => {
+      const newList = prev.filter((m) => m.id !== movieId);
+      localStorage.setItem("saveList", JSON.stringify(newList));
+      return newList;
+    });
+  };
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-500">
       <header className="sticky top-0 bg-white dark:bg-gray-800 shadow-md z-50 p-4">
@@ -302,6 +322,7 @@ function Movies() {
         {/* 电影列表 */}
         <MoviesList
           movies={filteredMovies}
+          saveList={saveList}
           isLoading={isLoading}
           isClicked={isClicked}
           isLiked={isLiked}
@@ -309,7 +330,7 @@ function Movies() {
             setSearchFilter((prev) => prev.filter((m) => m.id !== id))
           }
           onLike={handleInteraction(setIsLiked)}
-          onSave={handleInteraction(setIsClicked)}
+          onSave={handleSaveList}
           onMovieClick={handleMovieClick}
         />
 

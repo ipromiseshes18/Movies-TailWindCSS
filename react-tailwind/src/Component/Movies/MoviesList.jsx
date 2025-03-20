@@ -5,6 +5,7 @@ import { MovieCard } from "./MovieCard";
 
 export const MoviesList = ({
   movies,
+  saveList,
   isLoading,
   isClicked,
   isLiked,
@@ -51,6 +52,7 @@ export const MoviesList = ({
           <MovieCard
             key={movie.id}
             movie={movie}
+            isInSaveList={saveList.some((m) => m.id === movie.id)}
             isClicked={isClicked}
             isLiked={isLiked}
             onDelete={onDelete}
