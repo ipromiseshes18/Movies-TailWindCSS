@@ -345,6 +345,63 @@ function Movies() {
           onMovieClick={handleMovieClick}
         />
 
+        {/* 我的收藏夹 */}
+        <div className="mt-12">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-2xl font-bold">我的收藏 ({saveList.length})</h2>
+            <button
+              onClick={() => {
+                setSaveList([]);
+                localStorage.removeItem("saveList");
+              }}
+              className="px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600"
+            >
+              清空收藏
+            </button>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            {saveList.map((movie) => (
+              <motion.div
+                key={movie.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow relative"
+              >
+                <button
+                  onClick={() => handleSaveList(movie)}
+                  className="absolute top-2 right-2 p-2 bg-red-500 rounded-full hover:bg-red-600"
+                >
+                  ❌
+                </button>
+                <img
+                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                  alt={movie.title}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-3">
+                  <h3 className="font-bold truncate">{movie.title}</h3>
+                  <div className="flex justify-between items-center mt-2">
+                    <p className="text-yellow-500 text-sm">
+                      ★ {movie.vote_average}
+                    </p>
+                    <button
+                      onClick={() => handleMovieClick(movie)}
+                      className="text-blue-500 hover:text-blue-600 text-sm"
+                    >
+                      查看详情
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+            {saveList.length === 0 && (
+              <div className="col-span-full text-center text-gray-500 py-8">
+                😢 还没有收藏的电影哦~
+              </div>
+            )}
+          </div>
+        </div>
+
         {/* 随机电影 */}
         <div className="mt-12">
           <div className="flex justify-between items-center mb-4">
